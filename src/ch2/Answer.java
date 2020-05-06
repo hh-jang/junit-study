@@ -9,6 +9,11 @@ public class Answer {
         this.question = question;
     }
 
+    public Answer(Question characteristic, String matchingValue) {
+        this.question = characteristic;
+        this.i = characteristic.indexOf(matchingValue);
+    }
+
     public String getQuestionText() {
         return question.getText();
     }
