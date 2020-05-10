@@ -1,6 +1,5 @@
 package ch2;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,6 +16,9 @@ public class ProfileTest {
         this.profile = new Profile("Bull Hockey, Inc");
         this.question = new BooleanQuestion(1, "Got Bonuses?");
         this.criteria = new Criteria();
+        // 테스트 코드에 static은 배제 -> 각 테스트별 공유하는 자원이 존재해서 서로 의존적이다? -> 헬게이트
+        System.out.println("-----------매번 인스턴스를 생성하는지 확인하기 위해 hashcode 출력-----------");
+        System.out.println(this.hashCode());
     }
 
     @Test
