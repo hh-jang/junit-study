@@ -22,6 +22,8 @@ public class Profile {
         answerMap.put(answer.getQuestionText(), answer);
     }
 
+    // return false : MustMatch || 모든 case 미매칭인 문항이 미매칭
+    // return true : DontCase 하나라도 존재 || 하나라도 케이스 맞음
     public boolean matches(Criteria criteria) {
         score = 0;
 
@@ -37,6 +39,10 @@ public class Profile {
 
             if(match == false && criterion.getWeight() == Weight.MustMatch) {
                 kill = true;
+            }
+            if(match == true && criterion.getWeight() == Weight.MustMatch) {
+                score = Weight.MustMatch.getValue();        // overflow를 피하기 위함
+                break;
             }
             if(match) {
                 score += criterion.getWeight().getValue();
