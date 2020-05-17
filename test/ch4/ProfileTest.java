@@ -23,6 +23,6 @@ public class ProfileTest {
         criteria = new Criteria();
         criteria.add(new Criterion(Weight.DontCare, new Answer(Bool.TRUE, question)));
 
-        assertThat(profile.matches(criteria)).isFalse();
+        assertThat(profile.matches(criteria)).isTrue();
     }
 }
