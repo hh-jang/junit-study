@@ -27,5 +27,9 @@
     </orderEntry>
     <orderEntry type="library" exported="" scope="TEST" name="assertj-core-3.16.1" level="project" />
     <orderEntry type="library" name="javax.persistence:javax.persistence-api:2.2" level="project" />
+    <orderEntry type="library" name="json-simple-1.1" level="project" />
+    <orderEntry type="library" name="httpclient-4.5.12" level="project" />
+    <orderEntry type="library" name="httpcore-4.4.13" level="project" />
+    <orderEntry type="library" name="mockito-all-1.10.19" level="project" />
   </component>
 </module>
