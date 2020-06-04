@@ -15,9 +15,16 @@ public class ProfileTest {
     private Answer answerIsReimburses;
     private Answer answerIsNotReimburses;
 
+    private Criteria criteria;
+
     @BeforeEach
     public void createProfile() {
         profile = new Profile();
+    }
+
+    @BeforeEach
+    public void createCriteria() {
+        criteria = new Criteria();
     }
 
     @BeforeEach
@@ -32,28 +39,13 @@ public class ProfileTest {
     }
 
     @Test
-    public void matchesNothingWhenProfileEmpty() {
-        // Given
-        Criterion criterion = new Criterion(Weight.DontCare, answerIsRelocation);
-
-        // When
-        boolean result = profile.matches(criterion);
-
-        // Then
-        assertThat(result).isFalse();
-    }
-
-    @Test
     public void matchesWhenProfileContainMatchingAnswer() {
         // Given
         profile.add(answerIsRelocation);
         Criterion criterion = new Criterion(Weight.Important, answerIsRelocation);
 
-        // When
-        boolean result = profile.matches(criterion);
-
-        // Then
-        assertThat(result).isTrue();
+        // When, Then
+        assertThat(profile.matches(criterion)).isTrue();
     }
 
     @Test
@@ -62,11 +54,8 @@ public class ProfileTest {
         profile.add(answerIsNotRelocation);
         Criterion criterion = new Criterion(Weight.Important, answerIsRelocation);
 
-        // When
-        boolean result = profile.matches(criterion);
-
-        // Then
-        assertThat(result).isFalse();
+        // When, Then
+        assertThat(profile.matches(criterion)).isFalse();
     }
 
     @Test
@@ -77,15 +66,48 @@ public class ProfileTest {
 
         Criterion criterion = new Criterion(Weight.Important, answerIsRelocation);
 
-        // When
-        boolean result = profile.matches(criterion);
-
-        // Then
-        assertThat(result).isTrue();
+        // When, Then
+        assertThat(profile.matches(criterion)).isTrue();
     }
 
     @Test
     public void matchAgainstNullAnswerReturnFalse() {
         assertThat(new Answer(Bool.TRUE, new BooleanQuestion(0, "")).match(null)).isFalse();
+    }
+
+    @Test
+    public void doesNotMatchWhenNoneOfMultipleCriteriaMatch() {
+        // Given
+        profile.add(answerIsNotReimburses);
+
+        criteria.add(new Criterion(Weight.Important, answerIsReimburses));
+        criteria.add(new Criterion(Weight.Important, answerIsRelocation));
+
+        // When, Then
+        assertThat(profile.matches(criteria)).isFalse();
+    }
+
+    @Test
+    public void doesNotMatchWhenMustMeetCriteriaNotMet() {
+        // Given
+        profile.add(answerIsRelocation);
+        profile.add(answerIsReimburses);
+
+        criteria.add(new Criterion(Weight.Important, answerIsRelocation));
+        criteria.add(new Criterion(Weight.MustMatch, answerIsNotReimburses));
+
+        // When, Then
+        assertThat(profile.matches(criteria)).isFalse();
+    }
+
+    @Test
+    public void matchWhenCriterionIsDontCare() {
+        // Given
+        profile.add(answerIsReimburses);
+
+        criteria.add(new Criterion(Weight.DontCare, answerIsNotReimburses));
+
+        // When, Then
+        assertThat(profile.matches(criteria)).isTrue();
     }
 }

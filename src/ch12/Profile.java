@@ -7,8 +7,8 @@ public class Profile {
     private Map<String, Answer> answers = new HashMap<>();
 
     public boolean matches(Criterion criterion) {
-        Answer answer = matchingProfileAnswers(criterion);
-        return criterion.getAnswer().match(answer);
+        return criterion.getWeight() == Weight.DontCare ||
+                criterion.getAnswer().match(matchingProfileAnswers(criterion));
     }
 
     public Answer matchingProfileAnswers(Criterion criterion) {
@@ -17,5 +17,18 @@ public class Profile {
 
     public void add(Answer answer) {
         answers.put(answer.getQuestionText(), answer);
+    }
+
+    public boolean matches(Criteria criteria) {
+        boolean matches = false;
+        for(Criterion criterion : criteria) {
+            if (matches(criterion)) {
+                matches = true;
+            }
+            else if(Weight.MustMatch == criterion.getWeight()) {
+                return false;
+            }
+        }
+        return matches;
     }
 }
