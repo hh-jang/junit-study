@@ -9,6 +9,7 @@ public class ProfileTest {
     private Profile profile;
     private BooleanQuestion questionIsRelocation;
     private Answer answerIsRelocation;
+    private Answer answerIsNotRelocation;
 
     @BeforeEach
     public void createProfile() {
@@ -19,6 +20,7 @@ public class ProfileTest {
     public void createQuetionAndAnswer() {
         questionIsRelocation = new BooleanQuestion(1, "Relocation package?");
         answerIsRelocation = new Answer(Bool.TRUE, questionIsRelocation);
+        answerIsNotRelocation = new Answer(Bool.FALSE, questionIsRelocation);
     }
 
     @Test
@@ -44,5 +46,18 @@ public class ProfileTest {
 
         // Then
         assertThat(result).isTrue();
+    }
+
+    @Test
+    public void doesNotMatchWhenNoMatchingAnswer() {
+        // Given
+        profile.add(answerIsNotRelocation);
+        Criterion criterion = new Criterion(Weight.Important, answerIsRelocation);
+
+        // When
+        boolean result = profile.matches(criterion);
+
+        // Then
+        assertThat(result).isFalse();
     }
 }
