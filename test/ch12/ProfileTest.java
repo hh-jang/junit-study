@@ -18,4 +18,20 @@ public class ProfileTest {
         // Then
         assertThat(result).isFalse();
     }
+
+    @Test
+    public void matchesWhenProfileContainMatchingAnswer() {
+        // Given
+        Profile profile = new Profile();
+        Question question = new BooleanQuestion(1, "Relocation package?");
+        Answer answer = new Answer(Bool.TRUE, question);
+        profile.add(answer);
+        Criterion criterion = new Criterion(Weight.Important, answer);
+
+        // When
+        boolean result = profile.matches(criterion);
+
+        // Then
+        assertThat(result).isTrue();
+    }
 }
