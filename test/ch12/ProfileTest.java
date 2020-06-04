@@ -1,16 +1,30 @@
 package ch12;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
 
 public class ProfileTest {
+    private Profile profile;
+    private BooleanQuestion questionIsRelocation;
+    private Answer answerIsRelocation;
+
+    @BeforeEach
+    public void createProfile() {
+        profile = new Profile();
+    }
+
+    @BeforeEach
+    public void createQuetionAndAnswer() {
+        questionIsRelocation = new BooleanQuestion(1, "Relocation package?");
+        answerIsRelocation = new Answer(Bool.TRUE, questionIsRelocation);
+    }
+
     @Test
     public void matchesNothingWhenProfileEmpty() {
         // Given
-        Profile profile = new Profile();
-        Question question = new BooleanQuestion(1, "Relocation package?");
-        Criterion criterion = new Criterion(Weight.DontCare, new Answer(Bool.TRUE, question));
+        Criterion criterion = new Criterion(Weight.DontCare, answerIsRelocation);
 
         // When
         boolean result = profile.matches(criterion);
@@ -22,11 +36,8 @@ public class ProfileTest {
     @Test
     public void matchesWhenProfileContainMatchingAnswer() {
         // Given
-        Profile profile = new Profile();
-        Question question = new BooleanQuestion(1, "Relocation package?");
-        Answer answer = new Answer(Bool.TRUE, question);
-        profile.add(answer);
-        Criterion criterion = new Criterion(Weight.Important, answer);
+        profile.add(answerIsRelocation);
+        Criterion criterion = new Criterion(Weight.Important, answerIsRelocation);
 
         // When
         boolean result = profile.matches(criterion);
